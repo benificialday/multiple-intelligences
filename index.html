@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>다중지능검사</title>
+    <style>
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .intro {
+            background-color: #e9f7fe;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .question-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .intelligence-section {
+            display: none;
+        }
+        .active-section {
+            display: block;
+        }
+        .question {
+            margin-bottom: 15px;
+        }
+        .options {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+        }
+        .options label {
+            display: inline-block;
+            width: 60px;
+            text-align: center;
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        .progress-container {
+            width: 100%;
+            background-color: #ddd;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .progress-bar {
+            height: 20px;
+            background-color: #4CAF50;
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        #results {
+            display: none;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .result-item {
+            margin-bottom: 10px;
+        }
+        .result-bar {
+            height: 20px;
+            background-color: #3498db;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+        .restart-btn {
+            background-color: #f39c12;
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>다중지능검사</h1>
+    
+    <div class="intro">
+        <h2>검사 소개</h2>
+        <p>이 검사는 하워드 가드너의 다중지능이론에 기반하여 8가지 지능 유형을 측정합니다:</p>
+        <ol>
+            <li>언어적 지능 (Linguistic)</li>
+            <li>논리-수학적 지능 (Logical-Mathematical)</li>
+            <li>공간적 지능 (Spatial)</li>
+            <li>신체-운동적 지능 (Bodily-Kinesthetic)</li>
+            <li>음악적 지능 (Musical)</li>
+            <li>대인관계 지능 (Interpersonal)</li>
+            <li>자기이해 지능 (Intrapersonal)</li>
+            <li>자연주의적 지능 (Naturalist)</li>
+        </ol>
+        <p>각 질문에 대해 '전혀 아니다(1점)'부터 '매우 그렇다(5점)'까지 응답해주세요. 총 40문항이며, 약 10분 정도 소요됩니다.</p>
+        <button id="start-btn">검사 시작하기</button>
+    </div>
+    
+    <div class="progress-container">
+        <div class="progress-bar" id="progress"></div>
+    </div>
+    
+    <div id="question-container" class="question-container" style="display: none;">
+        <!-- 언어적 지능 -->
+        <div id="linguistic" class="intelligence-section active-section">
+            <h2>언어적 지능</h2>
+            <div class="question">
+                <p>1. 나는 책 읽기를 좋아한다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q1" value="1"> 1</label>
+                    <label><input type="radio" name="q1" value="2"> 2</label>
+                    <label><input type="radio" name="q1" value="3"> 3</label>
+                    <label><input type="radio" name="q1" value="4"> 4</label>
+                    <label><input type="radio" name="q1" value="5"> 5</label>
+                </div>
+            </div>
+            <div class="question">
+                <p>2. 나는 단어 게임(예: 끝말잇기, 십자말풀이)을 잘한다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q2" value="1"> 1</label>
+                    <label><input type="radio" name="q2" value="2"> 2</label>
+                    <label><input type="radio" name="q2" value="3"> 3</label>
+                    <label><input type="radio" name="q2" value="4"> 4</label>
+                    <label><input type="radio" name="q2" value="5"> 5</label>
+                </div>
+            </div>
+            <div class="question">
+                <p>3. 나는 글쓰기를 좋아한다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q3" value="1"> 1</label>
+                    <label><input type="radio" name="q3" value="2"> 2</label>
+                    <label><input type="radio" name="q3" value="3"> 3</label>
+                    <label><input type="radio" name="q3" value="4"> 4</label>
+                    <label><input type="radio" name="q3" value="5"> 5</label>
+                </div>
+            </div>
+            <div class="question">
+                <p>4. 나는 다른 사람에게 무언가를 설명하거나 가르치는 것을 좋아한다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q4" value="1"> 1</label>
+                    <label><input type="radio" name="q4" value="2"> 2</label>
+                    <label><input type="radio" name="q4" value="3"> 3</label>
+                    <label><input type="radio" name="q4" value="4"> 4</label>
+                    <label><input type="radio" name="q4" value="5"> 5</label>
+                </div>
+            </div>
+            <div class="question">
+                <p>5. 나는 새로운 단어를 쉽게 배우고 기억한다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q5" value="1"> 1</label>
+                    <label><input type="radio" name="q5" value="2"> 2</label>
+                    <label><input type="radio" name="q5" value="3"> 3</label>
+                    <label><input type="radio" name="q5" value="4"> 4</label>
+                    <label><input type="radio" name="q5" value="5"> 5</label>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 논리-수학적 지능 -->
+        <div id="logical" class="intelligence-section">
+            <h2>논리-수학적 지능</h2>
+            <div class="question">
+                <p>6. 나는 숫자를 다루는 것이 편하다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q6" value="1"> 1</label>
+                    <label><input type="radio" name="q6" value="2"> 2</label>
+                    <label><input type="radio" name="q6" value="3"> 3</label>
+                    <label><input type="radio" name="q6" value="4"> 4</label>
+                    <label><input type="radio" name="q6" value="5"> 5</label>
+                </div>
+            </div>
+            <div class="question">
+                <p>7. 나는 문제를 논리적으로 해결하는 것을 좋아한다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q7" value="1"> 1</label>
+                    <label><input type="radio" name="q7" value="2"> 2</label>
+                    <label><input type="radio" name="q7" value="3"> 3</label>
+                    <label><input type="radio" name="q7" value="4"> 4</label>
+                    <label><input type="radio" name="q7" value="5"> 5</label>
+                </div>
+            </div>
+            <div class="question">
+                <p>8. 나는 체계적으로 생각하는 것을 좋아한다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q8" value="1"> 1</label>
+                    <label><input type="radio" name="q8" value="2"> 2</label>
+                    <label><input type="radio" name="q8" value="3"> 3</label>
+                    <label><input type="radio" name="q8" value="4"> 4</label>
+                    <label><input type="radio" name="q8" value="5"> 5</label>
+                </div>
+            </div>
+            <div class="question">
+                <p>9. 나는 복잡한 문제를 작은 부분으로 나누어 해결하는 것을 좋아한다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q9" value="1"> 1</label>
+                    <label><input type="radio" name="q9" value="2"> 2</label>
+                    <label><input type="radio" name="q9" value="3"> 3</label>
+                    <label><input type="radio" name="q9" value="4"> 4</label>
+                    <label><input type="radio" name="q9" value="5"> 5</label>
+                </div>
+            </div>
+            <div class="question">
+                <p>10. 나는 실험하거나 추론하는 것을 좋아한다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q10" value="1"> 1</label>
+                    <label><input type="radio" name="q10" value="2"> 2</label>
+                    <label><input type="radio" name="q10" value="3"> 3</label>
+                    <label><input type="radio" name="q10" value="4"> 4</label>
+                    <label><input type="radio" name="q10" value="5"> 5</label>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 공간적 지능 -->
+        <div id="spatial" class="intelligence-section">
+            <h2>공간적 지능</h2>
+            <div class="question">
+                <p>11. 나는 지도를 잘 읽는다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q11" value="1"> 1</label>
+                    <label><input type="radio" name="q11" value="2"> 2</label>
+                    <label><input type="radio" name="q11" value="3"> 3</label>
+                    <label><input type="radio" name="q11" value="4"> 4</label>
+                    <label><input type="radio" name="q11" value="5"> 5</label>
+                </div>
+            </div>
+            <div class="question">
+                <p>12. 나는 그림을 그리거나 시각적인 예술 활동을 좋아한다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q12" value="1"> 1</label>
+                    <label><input type="radio" name="q12" value="2"> 2</label>
+                    <label><input type="radio" name="q12" value="3"> 3</label>
+                    <label><input type="radio" name="q12" value="4"> 4</label>
+                    <label><input type="radio" name="q12" value="5"> 5</label>
+                </div>
+            </div>
+            <div class="question">
+                <p>13. 나는 공간을 상상하고 머릿속에서 물체를 회전시키는 것이 쉽다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q13" value="1"> 1</label>
+                    <label><input type="radio" name="q13" value="2"> 2</label>
+                    <label><input type="radio" name="q13" value="3"> 3</label>
+                    <label><input type="radio" name="q13" value="4"> 4</label>
+                    <label><input type="radio" name="q13" value="5"> 5</label>
+                </div>
+            </div>
+            <div class="question">
+                <p>14. 나는 길을 잘 찾는다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q14" value="1"> 1</label>
+                    <label><input type="radio" name="q14" value="2"> 2</label>
+                    <label><input type="radio" name="q14" value="3"> 3</label>
+                    <label><input type="radio" name="q14" value="4"> 4</label>
+                    <label><input type="radio" name="q14" value="5"> 5</label>
+                </div>
+            </div>
+            <div class="question">
+                <p>15. 나는 퍼즐이나 입체도형 맞추기를 좋아한다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q15" value="1"> 1</label>
+                    <label><input type="radio" name="q15" value="2"> 2</label>
+                    <label><input type="radio" name="q15" value="3"> 3</label>
+                    <label><input type="radio" name="q15" value="4"> 4</label>
+                    <label><input type="radio" name="q15" value="5"> 5</label>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 신체-운동적 지능 -->
+        <div id="bodily" class="intelligence-section">
+            <h2>신체-운동적 지능</h2>
+            <div class="question">
+                <p>16. 나는 운동을 잘한다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q16" value="1"> 1</label>
+                    <label><input type="radio" name="q16" value="2"> 2</label>
+                    <label><input type="radio" name="q16" value="3"> 3</label>
+                    <label><input type="radio" name="q16" value="4"> 4</label>
+                    <label><input type="radio" name="q16" value="5"> 5</label>
+                </div>
+            </div>
+            <div class="question">
+                <p>17. 나는 손으로 만들거나 조립하는 활동을 좋아한다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q17" value="1"> 1</label>
+                    <label><input type="radio" name="q17" value="2"> 2</label>
+                    <label><input type="radio" name="q17" value="3"> 3</label>
+                    <label><input type="radio" name="q17" value="4"> 4</label>
+                    <label><input type="radio" name="q17" value="5"> 5</label>
+                </div>
+            </div>
+            <div class="question">
+                <p>18. 나는 춤추거나 몸을 움직이는 활동을 좋아한다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q18" value="1"> 1</label>
+                    <label><input type="radio" name="q18" value="2"> 2</label>
+                    <label><input type="radio" name="q18" value="3"> 3</label>
+                    <label><input type="radio" name="q18" value="4"> 4</label>
+                    <label><input type="radio" name="q18" value="5"> 5</label>
+                </div>
+            </div>
+            <div class="question">
+                <p>19. 나는 손재주가 좋다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q19" value="1"> 1</label>
+                    <label><input type="radio" name="q19" value="2"> 2</label>
+                    <label><input type="radio" name="q19" value="3"> 3</label>
+                    <label><input type="radio" name="q19" value="4"> 4</label>
+                    <label><input type="radio" name="q19" value="5"> 5</label>
+                </div>
+            </div>
+            <div class="question">
+                <p>20. 나는 앉아서 공부하는 것보다 활동적인 학습을 선호한다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q20" value="1"> 1</label>
+                    <label><input type="radio" name="q20" value="2"> 2</label>
+                    <label><input type="radio" name="q20" value="3"> 3</label>
+                    <label><input type="radio" name="q20" value="4"> 4</label>
+                    <label><input type="radio" name="q20" value="5"> 5</label>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 음악적 지능 -->
+        <div id="musical" class="intelligence-section">
+            <h2>음악적 지능</h2>
+            <div class="question">
+                <p>21. 나는 음악을 듣는 것을 즐긴다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q21" value="1"> 1</label>
+                    <label><input type="radio" name="q21" value="2"> 2</label>
+                    <label><input type="radio" name="q21" value="3"> 3</label>
+                    <label><input type="radio" name="q21" value="4"> 4</label>
+                    <label><input type="radio" name="q21" value="5"> 5</label>
+                </div>
+            </div>
+            <div class="question">
+                <p>22. 나는 노래나 멜로디를 쉽게 기억한다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q22" value="1"> 1</label>
+                    <label><input type="radio" name="q22" value="2"> 2</label>
+                    <label><input type="radio" name="q22" value="3"> 3</label>
+                    <label><input type="radio" name="q22" value="4"> 4</label>
+                    <label><input type="radio" name="q22" value="5"> 5</label>
+                </div>
+            </div>
+            <div class="question">
+                <p>23. 나는 악기를 연주하거나 노래 부르는 것을 좋아한다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q23" value="1"> 1</label>
+                    <label><input type="radio" name="q23" value="2"> 2</label>
+                    <label><input type="radio" name="q23" value="3"> 3</label>
+                    <label><input type="radio" name="q23" value="4"> 4</label>
+                    <label><input type="radio" name="q23" value="5"> 5</label>
+                </div>
+            </div>
+            <div class="question">
+                <p>24. 나는 리듬감이 좋다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q24" value="1"> 1</label>
+                    <label><input type="radio" name="q24" value="2"> 2</label>
+                    <label><input type="radio" name="q24" value="3"> 3</label>
+                    <label><input type="radio" name="q24" value="4"> 4</label>
+                    <label><input type="radio" name="q24" value="5"> 5</label>
+                </div>
+            </div>
+            <div class="question">
+                <p>25. 나는 음악을 들으면 기분이 좋아진다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q25" value="1"> 1</label>
+                    <label><input type="radio" name="q25" value="2"> 2</label>
+                    <label><input type="radio" name="q25" value="3"> 3</label>
+                    <label><input type="radio" name="q25" value="4"> 4</label>
+                    <label><input type="radio" name="q25" value="5"> 5</label>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 대인관계 지능 -->
+        <div id="interpersonal" class="intelligence-section">
+            <h2>대인관계 지능</h2>
+            <div class="question">
+                <p>26. 나는 다른 사람들과 함께 있는 것을 좋아한다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q26" value="1"> 1</label>
+                    <label><input type="radio" name="q26" value="2"> 2</label>
+                    <label><input type="radio" name="q26" value="3"> 3</label>
+                    <label><input type="radio" name="q26" value="4"> 4</label>
+                    <label><input type="radio" name="q26" value="5"> 5</label>
+                </div>
+            </div>
+            <div class="question">
+                <p>27. 나는 다른 사람의 감정을 잘 이해한다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q27" value="1"> 1</label>
+                    <label><input type="radio" name="q27" value="2"> 2</label>
+                    <label><input type="radio" name="q27" value="3"> 3</label>
+                    <label><input type="radio" name="q27" value="4"> 4</label>
+                    <label><input type="radio" name="q27" value="5"> 5</label>
+                </div>
+            </div>
+            <div class="question">
+                <p>28. 나는 팀 활동에서 잘 협력한다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q28" value="1"> 1</label>
+                    <label><input type="radio" name="q28" value="2"> 2</label>
+                    <label><input type="radio" name="q28" value="3"> 3</label>
+                    <label><input type="radio" name="q28" value="4"> 4</label>
+                    <label><input type="radio" name="q28" value="5"> 5</label>
+                </div>
+            </div>
+            <div class="question">
+                <p>29. 나는 다른 사람에게 조언을 해주는 것을 좋아한다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q29" value="1"> 1</label>
+                    <label><input type="radio" name="q29" value="2"> 2</label>
+                    <label><input type="radio" name="q29" value="3"> 3</label>
+                    <label><input type="radio" name="q29" value="4"> 4</label>
+                    <label><input type="radio" name="q29" value="5"> 5</label>
+                </div>
+            </div>
+            <div class="question">
+                <p>30. 나는 갈등 상황을 잘 해결한다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q30" value="1"> 1</label>
+                    <label><input type="radio" name="q30" value="2"> 2</label>
+                    <label><input type="radio" name="q30" value="3"> 3</label>
+                    <label><input type="radio" name="q30" value="4"> 4</label>
+                    <label><input type="radio" name="q30" value="5"> 5</label>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 자기이해 지능 -->
+        <div id="intrapersonal" class="intelligence-section">
+            <h2>자기이해 지능</h2>
+            <div class="question">
+                <p>31. 나는 내 감정을 잘 이해한다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q31" value="1"> 1</label>
+                    <label><input type="radio" name="q31" value="2"> 2</label>
+                    <label><input type="radio" name="q31" value="3"> 3</label>
+                    <label><input type="radio" name="q31" value="4"> 4</label>
+                    <label><input type="radio" name="q31" value="5"> 5</label>
+                </div>
+            </div>
+            <div class="question">
+                <p>32. 나는 혼자서 일하는 것을 좋아한다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q32" value="1"> 1</label>
+                    <label><input type="radio" name="q32" value="2"> 2</label>
+                    <label><input type="radio" name="q32" value="3"> 3</label>
+                    <label><input type="radio" name="q32" value="4"> 4</label>
+                    <label><input type="radio" name="q32" value="5"> 5</label>
+                </div>
+            </div>
+            <div class="question">
+                <p>33. 나는 내 자신의 강점과 약점을 잘 알고 있다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q33" value="1"> 1</label>
+                    <label><input type="radio" name="q33" value="2"> 2</label>
+                    <label><input type="radio" name="q33" value="3"> 3</label>
+                    <label><input type="radio" name="q33" value="4"> 4</label>
+                    <label><input type="radio" name="q33" value="5"> 5</label>
+                </div>
+            </div>
+            <div class="question">
+                <p>34. 나는 목표를 세우고 그것을 달성하기 위해 노력한다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q34" value="1"> 1</label>
+                    <label><input type="radio" name="q34" value="2"> 2</label>
+                    <label><input type="radio" name="q34" value="3"> 3</label>
+                    <label><input type="radio" name="q34" value="4"> 4</label>
+                    <label><input type="radio" name="q34" value="5"> 5</label>
+                </div>
+            </div>
+            <div class="question">
+                <p>35. 나는 자기 성찰을 자주 한다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q35" value="1"> 1</label>
+                    <label><input type="radio" name="q35" value="2"> 2</label>
+                    <label><input type="radio" name="q35" value="3"> 3</label>
+                    <label><input type="radio" name="q35" value="4"> 4</label>
+                    <label><input type="radio" name="q35" value="5"> 5</label>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 자연주의적 지능 -->
+        <div id="naturalist" class="intelligence-section">
+            <h2>자연주의적 지능</h2>
+            <div class="question">
+                <p>36. 나는 자연과 동식물에 관심이 많다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q36" value="1"> 1</label>
+                    <label><input type="radio" name="q36" value="2"> 2</label>
+                    <label><input type="radio" name="q36" value="3"> 3</label>
+                    <label><input type="radio" name="q36" value="4"> 4</label>
+                    <label><input type="radio" name="q36" value="5"> 5</label>
+                </div>
+            </div>
+            <div class="question">
+                <p>37. 나는 동식물의 특징을 잘 관찰하고 구분한다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q37" value="1"> 1</label>
+                    <label><input type="radio" name="q37" value="2"> 2</label>
+                    <label><input type="radio" name="q37" value="3"> 3</label>
+                    <label><input type="radio" name="q37" value="4"> 4</label>
+                    <label><input type="radio" name="q37" value="5"> 5</label>
+                </div>
+            </div>
+            <div class="question">
+                <p>38. 나는 야외 활동이나 캠핑을 좋아한다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q38" value="1"> 1</label>
+                    <label><input type="radio" name="q38" value="2"> 2</label>
+                    <label><input type="radio" name="q38" value="3"> 3</label>
+                    <label><input type="radio" name="q38" value="4"> 4</label>
+                    <label><input type="radio" name="q38" value="5"> 5</label>
+                </div>
+            </div>
+            <div class="question">
+                <p>39. 나는 환경 문제에 관심이 많다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q39" value="1"> 1</label>
+                    <label><input type="radio" name="q39" value="2"> 2</label>
+                    <label><input type="radio" name="q39" value="3"> 3</label>
+                    <label><input type="radio" name="q39" value="4"> 4</label>
+                    <label><input type="radio" name="q39" value="5"> 5</label>
+                </div>
+            </div>
+            <div class="question">
+                <p>40. 나는 계절의 변화나 날씨 패턴에 민감하다.</p>
+                <div class="options">
+                    <label><input type="radio" name="q40" value="1"> 1</label>
+                    <label><input type="radio" name="q40" value="2"> 2</label>
+                    <label><input type="radio" name="q40" value="3"> 3</label>
+                    <label><input type="radio" name="q40" value="4"> 4</label>
+                    <label><input type="radio" name="q40" value="5"> 5</label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="nav-buttons">
+            <button id="prev-btn" disabled>이전</button>
+            <button id="next-btn">다음</button>
+        </div>
+    </div>
+    
+    <div id="results" class="results">
+        <h2>검사 결과</h2>
+        <p>당신의 다중지능 유형은 다음과 같습니다:</p>
+        <div id="result-details"></div>
+        <div id="result-explanation"></div>
+        <button class="restart-btn" id="restart-btn">다시 검사하기</button>
+    </div>
+    
+    <script>
+        // 변수 초기화
+        const sections = ['linguistic', 'logical', 'spatial', 'bodily', 'musical', 'interpersonal', 'intrapersonal', 'naturalist'];
+        const sectionNames = {
+            'linguistic': '언어적 지능',
+            'logical': '논리-수학적 지능',
+            'spatial': '공간적 지능',
+            'bodily': '신체-운동적 지능',
+            'musical': '음악적 지능',
+            'interpersonal': '대인관계 지능',
+            'intrapersonal': '자기이해 지능',
+            'naturalist': '자연주의적 지능'
+        };
+        const explanations = {
+            'linguistic': '언어적 지능이 높은 사람은 언어를 효과적으로 사용하는 능력이 뛰어납니다. 독서, 작문, 말하기, 언어 학습에서 두각을 나타냅니다. 작가, 시인, 연설가, 교사, 변호사, 통역사 등의 직업이 적합할 수 있습니다.',
+            'logical': '논리-수학적 지능이 높은 사람은 숫자, 논리적 패턴, 문제 해결에 능숙합니다. 추론하고 분석하는 능력이 뛰어납니다. 과학자, 수학자, 프로그래머, 엔지니어, 회계사 등의 직업이 적합할 수 있습니다.',
+            'spatial': '공간적 지능이 높은 사람은 시각적으로 사고하고 공간을 상상하는 능력이 뛰어납니다. 그림, 도표, 지도를 통해 더 잘 학습합니다. 건축가, 디자이너, 예술가, 파일럿, 항해사 등의 직업이 적합할 수 있습니다.',
+            'bodily': '신체-운동적 지능이 높은 사람은 신체를 통한 표현과 조작에 능숙합니다. 손으로 만들고 움직이는 활동에 능합니다. 운동선수, 무용가, 배우, 외과의사, 물리치료사 등의 직업이 적합할 수 있습니다.',
+            'musical': '음악적 지능이 높은 사람은 소리, 리듬, 멜로디에 대한 감각이 뛰어납니다. 음악을 듣고, 작곡하고, 연주하는 능력이 탁월합니다. 음악가, 작곡가, 음악 교사, 음향 엔지니어 등의 직업이 적합할 수 있습니다.',
+            'interpersonal': '대인관계 지능이 높은 사람은 다른 사람의 감정, 동기, 욕구를 잘 이해하고 효과적으로 상호작용하는 능력이 뛰어납니다. 상담사, 영업사원, 교사, 정치가, 관리자 등의 직업이 적합할 수 있습니다.',
+            'intrapersonal': '자기이해 지능이 높은 사람은 자신의 감정, 강점, 약점, 동기를 잘 이해하고 성찰하는 능력이 뛰어납니다. 작가, 심리학자, 철학자, 연구원, 기업가 등의 직업이 적합할 수 있습니다.',
+            'naturalist': '자연주의적 지능이 높은 사람은 자연환경과 생물에 대한 관찰력과 이해력이 뛰어납니다. 생물학자, 환경 과학자, 농부, 수의사, 동물 행동학자 등의 직업이 적합할 수 있습니다.'
+        };
+        
+        let currentSection = 0;
+        const scores = {
+            'linguistic': 0,
+            'logical': 0,
+            'spatial': 0,
+            'bodily': 0,
+            'musical': 0,
+            'interpersonal': 0,
+            'intrapersonal': 0,
+            'naturalist': 0
+        };
+        
+        // DOM 요소
+        const startBtn = document.getElementById('start-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const questionContainer = document.getElementById('question-container');
+        const intro = document.querySelector('.intro');
+        const progressBar = document.getElementById('progress');
+        const results = document.getElementById('results');
+        const resultDetails = document.getElementById('result-details');
+        const resultExplanation = document.getElementById('result-explanation');
+        
+        // 이벤트 리스너
+        startBtn.addEventListener('click', startTest);
+        prevBtn.addEventListener('click', showPrevSection);
+        nextBtn.addEventListener('click', showNextSection);
+        restartBtn.addEventListener('click', restartTest);
+        
+        // 검사 시작
+        function startTest() {
+            intro.style.display = 'none';
+            questionContainer.style.display = 'block';
+            updateProgress();
+        }
+        
+        // 이전 섹션 표시
+        function showPrevSection() {
+            if (currentSection > 0) {
+                // 현재 섹션 숨기기
+                document.getElementById(sections[currentSection]).classList.remove('active-section');
+                
+                // 이전 섹션으로 이동
+                currentSection--;
+                
+                // 이전 섹션 표시
+                document.getElementById(sections[currentSection]).classList.add('active-section');
+                
+                // 버튼 상태 업데이트
+                updateButtonStates();
+                updateProgress();
+            }
+        }
+        
+        // 다음 섹션 표시
+        function showNextSection() {
+            // 현재 섹션의 질문들이 모두 응답되었는지 확인
+            const currentSectionId = sections[currentSection];
+            const questions = document.querySelectorAll(`#${currentSectionId} .question`);
+            let allAnswered = true;
+            
+            questions.forEach(question => {
+                const questionNumber = question.querySelector('p').textContent.split('.')[0];
+                const radios = question.querySelectorAll('input[type="radio"]');
+                let answered = false;
+                
+                radios.forEach(radio => {
+                    if (radio.checked) {
+                        answered = true;
+                        // 점수 계산
+                        const questionIndex = parseInt(radio.name.substring(1)) - 1;
+                        const intelligenceIndex = Math.floor(questionIndex / 5);
+                        scores[sections[intelligenceIndex]] += parseInt(radio.value);
+                    }
+                });
+                
+                if (!answered) {
+                    allAnswered = false;
+                }
+            });
+            
+            if (!allAnswered) {
+                alert('모든 질문에 응답해주세요.');
+                return;
+            }
+            
+            if (currentSection < sections.length - 1) {
+                // 현재 섹션 숨기기
+                document.getElementById(sections[currentSection]).classList.remove('active-section');
+                
+                // 다음 섹션으로 이동
+                currentSection++;
+                
+                // 다음 섹션 표시
+                document.getElementById(sections[currentSection]).classList.add('active-section');
+                
+                // 버튼 상태 업데이트
+                updateButtonStates();
+                updateProgress();
+            } else {
+                // 모든 섹션 완료, 결과 표시
+                showResults();
+            }
+        }
+        
+        // 버튼 상태 업데이트
+        function updateButtonStates() {
+            prevBtn.disabled = currentSection === 0;
+            nextBtn.textContent = currentSection === sections.length - 1 ? '결과 보기' : '다음';
+        }
+        
+        // 진행 상태 업데이트
+        function updateProgress() {
+            const progressPercentage = ((currentSection + 1) / sections.length) * 100;
+            progressBar.style.width = `${progressPercentage}%`;
+        }
+        
+        // 결과 표시
+        function showResults() {
+            // 결과 저장 및 정렬
+            const sortedScores = [];
+            for (const intelligence in scores) {
+                sortedScores.push({
+                    name: intelligence,
+                    score: scores[intelligence]
+                });
+            }
+            sortedScores.sort((a, b) => b.score - a.score);
+            
+            // 결과 표시
+            questionContainer.style.display = 'none';
+            results.style.display = 'block';
+            progressBar.style.width = '100%';
+            
+            resultDetails.innerHTML = '';
+            
+            sortedScores.forEach(item => {
+                const percentage = (item.score / 25) * 100;
+                const resultItem = document.createElement('div');
+                resultItem.className = 'result-item';
+                resultItem.innerHTML = `
+                    <div><strong>${sectionNames[item.name]}</strong>: ${item.score}점 (${percentage.toFixed(1)}%)</div>
+                    <div class="result-bar" style="width: ${percentage}%;"></div>
+                `;
+                resultDetails.appendChild(resultItem);
+            });
+            
+            // 상위 3개 지능에 대한 설명 표시
+            resultExplanation.innerHTML = '<h3>당신의 주요 지능 특성 설명:</h3>';
+            for (let i = 0; i < 3; i++) {
+                resultExplanation.innerHTML += `
+                    <div class="explanation-item">
+                        <h4>${i+1}. ${sectionNames[sortedScores[i].name]}</h4>
+                        <p>${explanations[sortedScores[i].name]}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // 다시 시작
+        function restartTest() {
+            // 점수 초기화
+            for (const intelligence in scores) {
+                scores[intelligence] = 0;
+            }
+            
+            // 라디오 버튼 초기화
+            const radios = document.querySelectorAll('input[type="radio"]');
+            radios.forEach(radio => {
+                radio.checked = false;
+            });
+            
+            // 첫 섹션으로 돌아가기
+            currentSection = 0;
+            sections.forEach(section => {
+                document.getElementById(section).classList.remove('active-section');
+            });
+            document.getElementById(sections[0]).classList.add('active-section');
+            
+            // 버튼 상태 업데이트
+            updateButtonStates();
+            
+            // UI 업데이트
+            results.style.display = 'none';
+            intro.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
